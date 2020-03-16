@@ -4,8 +4,10 @@ const initialState = {
   products: null,
   product: null,
   productsLoaded: false,
-  dis : false,
-  coin : [1,2,5,10]
+  coin : [1,2,5,10],
+  submitBuying : false,
+  buyingDetails : null,
+  currentCoin : 0
 };
 
 const reducer = function(state = initialState, action) {
@@ -26,15 +28,25 @@ const reducer = function(state = initialState, action) {
         ...state,
         productsLoaded: true
       };
-    
     case types.BUY_PRODUCT:
       return {
-
+        ...state,
+        buyingDetails : action.payload
       }
-    case "testDispatch" :
+    case types.CLEAR_CART:
+      return{
+        ...state,
+        product : null
+      }
+    case types.TOGGLE_SUBBIT:
       return {
         ...state,
-        dis : !state.dis
+        submitBuying : !state.submitBuying,
+      }
+    case types.UPDATE_COIN:
+      return {
+        ...state,
+        currentCoin : action.payload
       }
     default:
       return state;

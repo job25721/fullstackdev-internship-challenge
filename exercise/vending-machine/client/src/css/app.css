@@ -34,6 +34,13 @@ body {
     background-color: #212121
 }
 
+#coinInsert{
+    background-color: #558B2F;
+}
+
+#coinInsert:hover{
+    background-color: red;
+}
 .coinBtn {
   animation-name: bounce;
   animation-duration: 2s;

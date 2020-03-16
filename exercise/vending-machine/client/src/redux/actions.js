@@ -34,6 +34,16 @@ export const appendProducts = products => {
     var col = document.createElement("div");
     col.setAttribute("class", "col col-lg-3");
     row.appendChild(col);
+    var trans = ""
+    var in_stock = ""
+    if(each.in_stock) {
+      trans = "Yes" 
+      in_stock = `<p class="btn-success card-text" >In stock :${trans}</p>`
+    }
+    else{
+      trans = "No"
+      in_stock = `<p class="btn-danger card-text" >In stock : ${trans}</p>`
+    } 
     var html = ` <div class="card mt-3" style="width:15rem">
                   <img
                      width = 100%
@@ -45,26 +55,43 @@ export const appendProducts = products => {
                   <div class="card-body text-center">
                     <h5 class="card-title">${each.name}</h5>
                     <p class="card-text">Price : ${each.price}</p>
-                    <button class="btn btn-primary buy" value="${each.id}">
-                      Buy
+                    <button class="btn-outline-success buy" value="${each.id}">
+                      Select
                     </button>
+                    <hr />
+                    ${in_stock}
                   </div>
                 </div>
                 `;
     $(col).append(html);
     count++;
   };
-  products.map(reducer);
+  products.map(reducer)
+
 };
 
-const productContent = (coins, coinNow,event) => {
+const productContent = (coins, currentCoin,e) => {
+  var title = e.currentTarget.previousElementSibling.previousElementSibling.textContent.split(" ")    
+  var price = e.currentTarget.previousElementSibling.textContent
   const contentSection = document.createElement("div");
   contentSection.setAttribute("class", "swalButton row");
   var div = document.createElement("div");
   div.setAttribute("class", "col");
-  div.innerHTML =
-    "<h1 style='position:relative;top:30px'>Pepsi</h1><h2>Max</h2>";
+  var hParams = 1;
+  for(let i=0;i<title.length;i++){
+    const h = document.createElement(`h${hParams}`)
+    if(hParams === 1) h.setAttribute("style","position:relative;top:25px")
+    h.innerHTML = title[i]
+    div.appendChild(h)
+    if(hParams < 2)
+      hParams++;
+  }
+  const p = document.createElement("h4")
+  p.innerHTML = price
+
+  div.appendChild(p)
   contentSection.appendChild(div);
+  
   div = document.createElement("div");
   div.setAttribute("class", "col");
 
@@ -72,7 +99,7 @@ const productContent = (coins, coinNow,event) => {
   header.innerHTML = "Remianing time <b></b> mins.";
   const text = document.createElement("h2");
   text.setAttribute("id", "currentCoin");
-  text.innerHTML = `<h3>inserted : ${coinNow}</h3>`;
+  text.innerHTML = `<h3>${currentCoin} ฿</h3>`;
   div.appendChild(text);
 
   coins.map(coin => {
@@ -87,63 +114,122 @@ const productContent = (coins, coinNow,event) => {
   return contentSection;
 };
 
-export const productModal =  (coinNow, coinTypes) => async dispatch => {
+export const productModal = (currentCoin, coinTypes) => async dispatch => {
   $(".buy").on("click", e => {
-    const contentSection = productContent(coinTypes,coinNow,e)
+    const contentSection = productContent(coinTypes,currentCoin,e);
     const customSwal = Swal.mixin({
       customClass: {
-        confirmButton: "btn btn-success m-1",
-        cancelButton: "btn btn-danger m-1"
+        confirmButton: "btn-success m-1",
+        cancelButton: "btn-warning m-1"
       },
       buttonsStyling: false
     });
     let timerInterval;
     customSwal
       .fire({
-        title: "Please insert your coin!",
+        // title: "Please insert your coin!",
         html: contentSection,
-        timer: 3000000,
+        timer: 100000,
         timerProgressBar: true,
         confirmButtonText: "Buy",
-        cancelButtonText: "Cancel",
+        cancelButtonText : "Another drinks",
         showConfirmButton: true,
         showCancelButton: true,
-        onBeforeOpen: () => {
-          timerInterval = setInterval(() => {
-            const content = Swal.getContent();
-            if (content) {
-              const b = content.querySelector("b");
-              if (b) {
-                var time = Swal.getTimerLeft();
-                var min = Math.floor((time / 1000 / 60) << 0);
-                var sec = Math.floor((time / 1000) % 60);
-                b.textContent = min + " " + sec;
-              }
-            }
-          }, 100);
-        },
         onClose: () => {
           clearInterval(timerInterval);
         }
       })
       .then(result => {
+        console.log();
         if (result.dismiss === Swal.DismissReason.timer) {
-          alert("Time out!!");
-        } else if (result.value) {
-          alert("success");
-          customSwal.close();
-        } else {
           Swal.fire({
-            title: "Coin Change",
-            html: `<h1>${coinNow}</h1>`,
-            icon: "error"
-          });
-          coinNow = 0;
+            html : '<h1>Times out!!!</h1>',
+            icon : "info",
+
+          })
+        } else if (result.value) {
+          dispatch({type:types.UPDATE_COIN,payload: currentCoin})
+          dispatch({type : types.BUY_PRODUCT ,payload : {currentCoin : currentCoin,buyingID : e.target.value}})
+          dispatch({type:types.TOGGLE_SUBBIT})
+          customSwal.close();
+        }else{
+          customSwal.close();
         }
       });
     $(".coinBtn").on("click", e => {
-      coinNow += parseInt(e.target.value);
-      $("#currentCoin").html(`<h3>inserted : ${coinNow}</h3>`);
+      currentCoin += parseInt(e.target.value);
+      dispatch({type:types.UPDATE_COIN,payload: currentCoin})
+      $("#currentCoin").html(`<h3>${currentCoin} ฿</h3>`);
     });
   });
 };
+
+export const CoinCalculator = (insertedCoin,changes) =>{
+  if(insertedCoin === 0) changes = [0]
+  while (insertedCoin !== 0) {
+    if (insertedCoin >= 10) {
+      insertedCoin -= 10;
+      changes.push(10);
+    } else if (insertedCoin >= 5) {
+      insertedCoin -= 5;
+      changes.push(5);
+    } else if (insertedCoin >= 2) {
+      insertedCoin -= 2;
+      changes.push(2);
+    } else if (insertedCoin >= 1) {
+      insertedCoin -= 1;
+      changes.push(1);
+    }
+  }
+  return changes
+}
+
+export const productCheckout = (product,insertedCoin) => dispatch => {
+  const price = product.price;
+  var changes = []
+  if(product.in_stock){
+    if(insertedCoin >= product.price){
+         insertedCoin -= price
+         Swal.fire({
+          // title: 'Thank you',
+          html : `<h2 style="color:white">Thank you !</h2><h3 style="color:white">You've got ${product.name}</h3>`,
+          width: 500,
+          padding: '3em',
+          background: '#fff url(https://media.giphy.com/media/VGuAZNdkPUpEY/giphy.gif)',
+          backdrop: `
+            rgba(0,0,123,0.4)
+            left top
+            no-repeat
+          `
+        })
+        //  Swal.fire({
+        //   title : "Thank you",
+        //   icon : "success",
+        //   html : `<h3>You've got ${product.name}</h3>`
+        // })
+        .then(()=>{
+          if(insertedCoin !== 0){
+            changes = CoinCalculator(insertedCoin,changes)
+            Swal.fire({
+              title: "Coin Change",
+              html: `<h1>${changes}</h1>`,
+              icon: "success"
+            });
+          }
+        })
+        dispatch({type:types.UPDATE_COIN,payload: 0})
+        dispatch({type:types.BUY_PRODUCT,payload:null})
+    }else{
+       Swal.fire({
+        title : "Sorry",
+        icon : "warning",
+        html : `<h3>You don't have enough money</h3>`
+      })
+    }
+  }else{
+    Swal.fire({
+      title:"This product is out of stock",
+      icon : "error"
+    })
+  }
+}

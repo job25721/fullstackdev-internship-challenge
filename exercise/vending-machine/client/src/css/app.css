@@ -1,0 +1,54 @@
+body {
+  font-family: "Roboto Mono", monospace;
+}
+
+#coin1{
+    background-color:#EF5350
+}
+
+#coin1:hover{
+    background-color: #E53935;
+}
+
+#coin2{
+    background-color: #FBC02D;
+}
+
+#coin2:hover{
+    background-color: #F9A825;
+}
+
+#coin5{
+    background-color: #7CB342
+}
+
+#coin5:hover{
+    background-color: #689F38;
+}
+
+#coin10{
+    background-color: #424242;
+}
+
+#coin10:hover {
+    background-color: #212121
+}
+
+.coinBtn {
+  animation-name: bounce;
+  animation-duration: 2s;
+  padding: 10px 10px;
+  font-size: 24px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+}
+
+.coinBtn:active {
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}

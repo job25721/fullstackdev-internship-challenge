@@ -1,0 +1,22 @@
+.logo{
+    width: 100px;
+    height: 100px;
+}
+.title{
+    position: relative;
+    font-size: 45px;
+    /* font-size: 10%; */
+    /* text-align: center; */
+
+}
+.status{
+    position: relative;
+    top: 30px;
+}
+
+@media (max-width:1250px){
+    .title{
+        font-size: 27px;
+    }
+    
+}

@@ -127,7 +127,6 @@ export const productModal = (currentCoin, coinTypes) => async dispatch => {
     let timerInterval;
     customSwal
       .fire({
-        // title: "Please insert your coin!",
         html: contentSection,
         timer: 100000,
         timerProgressBar: true,
@@ -149,7 +148,7 @@ export const productModal = (currentCoin, coinTypes) => async dispatch => {
           })
         } else if (result.value) {
           dispatch({type:types.UPDATE_COIN,payload: currentCoin})
-          dispatch({type : types.BUY_PRODUCT ,payload : {currentCoin : currentCoin,buyingID : e.target.value}})
+          dispatch({type:types.BUY_PRODUCT ,payload : {currentCoin : currentCoin,buyingID : e.target.value}})
           dispatch({type:types.TOGGLE_SUBBIT})
           customSwal.close();
         }else{
@@ -202,11 +201,6 @@ export const productCheckout = (product,insertedCoin) => dispatch => {
             no-repeat
           `
         })
-        //  Swal.fire({
-        //   title : "Thank you",
-        //   icon : "success",
-        //   html : `<h3>You've got ${product.name}</h3>`
-        // })
         .then(()=>{
           if(insertedCoin !== 0){
             changes = CoinCalculator(insertedCoin,changes)

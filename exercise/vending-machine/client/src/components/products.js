@@ -66,11 +66,6 @@ const Products = props => {
     }
   }
 
-  //debugFunc
-  function click() {
-    // console.log(props.currentCoin);
-  }
-
   return (
     <Fragment>
       <div className="text-left">
@@ -105,20 +100,15 @@ Products.propTypes = {
   productCheckout: PropTypes.func.isRequired,
   currentCoin: PropTypes.number.isRequired
 };
+
 const mapStateToProps = state => ({
   products: state.products,
   productsLoaded: state.productsLoaded,
   product: state.product,
   coins: state.coin,
-  dis: state.dis,
   buyingDetails: state.buyingDetails,
   submitBuying: state.submitBuying,
   currentCoin: state.currentCoin
 });
 
-export default connect(mapStateToProps, {
-  fecthAllProduct,
-  productModal,
-  fetchByID,
-  productCheckout
-})(Products);
+export default connect(mapStateToProps,{fecthAllProduct,productModal,fetchByID,productCheckout})(Products);

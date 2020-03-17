@@ -1,22 +1,16 @@
 {
-  "name": "vendeing-machine-server",
+  "name": "vending-machine",
   "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "description": "for dev",
+  "main": "index.js",
   "scripts": {
-    "start": "node server",
-    "server": "nodemon server",
+    "server": "npm run server --prefix server",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "concurrently": "^5.1.0",
-    "nodemon": "^2.0.2"
-  },
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.17.1"
+    "concurrently": "^5.1.0"
   }
 }

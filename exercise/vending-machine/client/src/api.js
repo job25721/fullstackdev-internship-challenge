@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export default axios.create({
-    baseURL : 'http://localhost:8000',
+    baseURL : 'https://us-central1-vending-machine-86eda.cloudfunctions.net/app',
     withCredentials: false,
     headers: {
         Accept: 'application/json',

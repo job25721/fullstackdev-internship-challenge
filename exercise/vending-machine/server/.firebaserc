@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "default": "vending-machine-server",
+    "vendingExpress": "vending-machine-server",
+    "vending": "vending-machine-86eda"
+  }
+}

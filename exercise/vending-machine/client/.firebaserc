@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "vending-machine-86eda",
+    "vending": "vending-machine-86eda"
+  }
+}
